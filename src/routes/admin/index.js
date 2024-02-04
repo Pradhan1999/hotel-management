@@ -6,7 +6,8 @@ import withAdminLayout from '../../layout/withAdminLayout';
 
 const Dashboard = lazy(() => import('../../container/dashboard'));
 // const TestList = lazy(() => import('./testList'));
-const QuestionBank = lazy(() => import('../../container/questionBank'));
+const Orders = lazy(() => import('../../container/orders'));
+const Users = lazy(() => import('../../container/AllUsers'));
 // const ContactUs = lazy(() => import('../../container/contact/Contact'));
 // const Customers = lazy(() => import('../../container/Customers'));
 
@@ -37,8 +38,8 @@ const Admin = React.memo(() => {
     >
       <Routes>
         <Route index path="/*" element={<DemoEight />} />
-        <Route index path="orders/*" element={<QuestionBank />} />
-        <Route index path="users/*" element={<QuestionBank />} />
+        <Route index path="orders/*" element={<Orders />} />
+        <Route index path="users/*" element={<Users />} />
         {/* <Route path="demo-2" element={<DemoTwo />} />
         <Route path="demo-3" element={<DemoThree />} />
         <Route path="demo-4" element={<DemoFour />} />

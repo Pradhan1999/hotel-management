@@ -216,11 +216,11 @@ const ThemeLayout = (WrappedComponent) => {
                         <span className="inline-block w-full font-medium admin-footer__copyright md:text-center text-theme-gray dark:text-white60 md:mb-[10px]">
                           © 2023
                           <Link className="mx-[4px] text-primary" to="#">
-                            2BRCIC
+                            Hotel Management
                           </Link>
                         </span>
                       </Col>
-                      <Col md={12} xs={24}>
+                      {/* <Col md={12} xs={24}>
                         <div className="justify-end md:justify-center items-center flex gap-[15px]">
                           <NavLink className="text-theme-gray dark:text-white60 text-[14px] hover:text-primary" to="#">
                             About
@@ -232,7 +232,7 @@ const ThemeLayout = (WrappedComponent) => {
                             Contact
                           </NavLink>
                         </div>
-                      </Col>
+                      </Col> */}
                     </Row>
                   </FooterStyle>
                 </Content>
