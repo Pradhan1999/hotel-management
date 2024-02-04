@@ -60,10 +60,10 @@ function MenuItems({ toggleCollapsed }) {
       !topMenu && <UilCreateDashboard />,
     ),
     getItem(
-      <NavLink onClick={toggleCollapsed} to={'/orders'}>
-        {t('orders')}
+      <NavLink onClick={toggleCollapsed} to={'/rooms'}>
+        {t('rooms')}
       </NavLink>,
-      'orders',
+      'rooms',
       !topMenu && <UilShieldCheck />,
     ),
     getItem(

@@ -4,24 +4,11 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 
 import withAdminLayout from '../../layout/withAdminLayout';
 
-const Dashboard = lazy(() => import('../../container/dashboard'));
-// const TestList = lazy(() => import('./testList'));
-const Orders = lazy(() => import('../../container/orders'));
-const Users = lazy(() => import('../../container/AllUsers'));
-// const ContactUs = lazy(() => import('../../container/contact/Contact'));
-// const Customers = lazy(() => import('../../container/Customers'));
-
-const NotFound = lazy(() => import('../../container/pages/404'));
-
-// const DemoTwo = lazy(() => import('../../container/dashboard/DemoTwo'));
-// const DemoThree = lazy(() => import('../../container/dashboard/DemoThree'));
-// const DemoFour = lazy(() => import('../../container/dashboard/DemoFour'));
-// const DemoFive = lazy(() => import('../../container/dashboard/DemoFive'));
-// const DemoSix = lazy(() => import('../../container/dashboard/DemoSix'));
-// const DemoSeven = lazy(() => import('../../container/dashboard/DemoSeven'));
+// const Dashboard = lazy(() => import('../../container/dashboard'));
 const DemoEight = lazy(() => import('../../container/dashboard/DemoEight'));
-// const DemoNine = lazy(() => import('../../container/dashboard/DemoNine'));
-// const DemoTen = lazy(() => import('../../container/dashboard/DemoTen'));
+const Rooms = lazy(() => import('../../container/rooms'));
+const Users = lazy(() => import('../../container/AllUsers'));
+const NotFound = lazy(() => import('../../container/pages/404'));
 
 const Admin = React.memo(() => {
   const { pathname } = useLocation();
@@ -37,8 +24,8 @@ const Admin = React.memo(() => {
       }
     >
       <Routes>
-        <Route index path="/*" element={<DemoEight />} />
-        <Route index path="orders/*" element={<Orders />} />
+        <Route index path="/*" element={<DemoEight />} /> //dashboard
+        <Route index path="rooms/*" element={<Rooms />} />
         <Route index path="users/*" element={<Users />} />
         {/* <Route path="demo-2" element={<DemoTwo />} />
         <Route path="demo-3" element={<DemoThree />} />
@@ -53,7 +40,6 @@ const Admin = React.memo(() => {
         <Route path="question-bank/*" element={<QuestionBank />} />
         <Route path="customers/*" element={<Customers />} />
         <Route path="contactUs/*" element={<ContactUs />} /> */}
-
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

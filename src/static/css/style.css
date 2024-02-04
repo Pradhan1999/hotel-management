@@ -438,7 +438,7 @@ hr{
   @apply text-start !important;
 }
 .ant-input{
-  @apply dark:!bg-white10 dark:text-white60 dark:border-white10;
+  @apply dark:!bg-white10 dark:text-white60 dark:border-white10 !p-2;
 }
 
 .ant-input-number-handler-wrap{
@@ -454,11 +454,11 @@ hr{
 }
 
 .ant-input-affix-wrapper{
-  @apply dark:bg-white10 dark:border-white10;
+  @apply dark:bg-white10 dark:border-white10 !p-2;
 }
 
 .ant-input-affix-wrapper .ant-input{
-  @apply dark:!bg-transparent;
+  @apply dark:!bg-transparent !p-0;
 }
 
 .ant-input-password-icon.anticon{
