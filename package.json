@@ -32,12 +32,15 @@
     "moment": "^2.29.1",
     "peity-react": "0.0.7",
     "prop-types": "^15.8.1",
+    "query-string": "^8.2.0",
+    "querystring": "^0.2.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
     "react-beautiful-dnd": "^13.1.0",
     "react-big-calendar": "^1.6.9",
     "react-calendar": "^3.6.0",
     "react-chartjs-2": "^4.0.1",
+    "react-cookie": "^7.0.2",
     "react-countdown": "^2.3.2",
     "react-countup": "^6.1.1",
     "react-csv": "^2.2.2",
@@ -71,9 +74,6 @@
     "xlsx": "^0.17.5"
   },
   "homepage": "http:///hexadash-react",
-  "resolutions": {
-    "autoprefixer": "10.4.5"
-  },
   "scripts": {
     "start": "craco start",
     "build": "set \"GENERATE_SOURCEMAP=false\" && craco --max-old-space-size=4096 build",

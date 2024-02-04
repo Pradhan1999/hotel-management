@@ -1,6 +1,7 @@
-import { Button, Form, Input, InputNumber, Select, Upload } from 'antd';
+import { Button, Form, Input, InputNumber, Select, Upload, message } from 'antd';
 import React from 'react';
 import { UploadOutlined } from '@ant-design/icons';
+import { addRooms } from '../../utility/services/rooms';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -8,6 +9,18 @@ const { TextArea } = Input;
 const AddRoom = ({ setisAddRoom }) => {
   const onFinish = (values) => {
     console.log(values);
+
+    const body = {};
+
+    addRooms({
+      body: body,
+    })
+      ?.then((res) => {
+        console.log('res', res);
+      })
+      .catch((err) => {
+        console.log('err :>> ', err);
+      });
   };
   return (
     <>

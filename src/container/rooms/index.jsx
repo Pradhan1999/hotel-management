@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Modal } from 'antd';
 
 import { Space, Table, Tag } from 'antd';
@@ -6,6 +6,7 @@ import AddRoom from './AddRoom';
 import { GlobalUtilityStyle } from '../styled';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Cards } from '../../components/cards/frame/cards-frame';
+import { getAllRooms } from '../../utility/services/rooms';
 
 const columns = [
   {
@@ -91,6 +92,16 @@ const Rooms = () => {
       breadcrumbName: 'Rooms',
     },
   ];
+
+  const getAllRoomList = () => {
+    getAllRooms({})
+      .then((res) => console.log('res', res))
+      .catch((err) => console.log('err', err));
+  };
+
+  useEffect(() => {
+    getAllRoomList();
+  }, []);
 
   return (
     <>
