@@ -1,5 +1,6 @@
 import {
   UilCreateDashboard,
+  UilShieldCheck,
   //   UilDollarAlt,
 } from '@iconscout/react-unicons';
 import { Menu } from 'antd';
@@ -52,11 +53,25 @@ function MenuItems({ toggleCollapsed }) {
 
   const items = [
     getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}`}>
+      <NavLink onClick={toggleCollapsed} to={'/dashboard'}>
         {t('dashboard')}
       </NavLink>,
       'dashboard',
       !topMenu && <UilCreateDashboard />,
+    ),
+    getItem(
+      <NavLink onClick={toggleCollapsed} to={'/orders'}>
+        {t('orders')}
+      </NavLink>,
+      'orders',
+      !topMenu && <UilShieldCheck />,
+    ),
+    getItem(
+      <NavLink onClick={toggleCollapsed} to={'/users'}>
+        {t('users')}
+      </NavLink>,
+      'users',
+      !topMenu && <UilShieldCheck />,
     ),
     // getItem(
     //   <NavLink onClick={toggleCollapsed} to={`${path}testList`}>

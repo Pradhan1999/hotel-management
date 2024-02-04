@@ -2,53 +2,27 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Form, Input, Button, Row, Col } from 'antd';
 import { useSelector } from 'react-redux';
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import { ReactSVG } from 'react-svg';
-// import UilFacebook from '@iconscout/react-unicons/icons/uil-facebook-f';
-// import UilTwitter from '@iconscout/react-unicons/icons/uil-twitter';
-// import UilGithub from '@iconscout/react-unicons/icons/uil-github';
-// import { Auth0Lock } from 'auth0-lock';
-// import { login } from '../../../../redux/authentication/actionCreator';
+import { useAtom } from 'jotai';
 import { Checkbox } from '../../../../components/checkbox/checkbox';
-// import { auth0options } from '../../../../config/auth0';
-
-// const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-// const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
+import { isCurrentUser } from '../../../../globalStore';
 
 function SignIn() {
-  // const history = useNavigate();
-  // const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.auth.loading);
+  const [isLoggedIn, setIsLoggedIn] = useAtom(isCurrentUser);
   const [form] = Form.useForm();
   const [state, setState] = useState({
     checked: null,
   });
 
-  // const lock = new Auth0Lock(clientId, domain, auth0options);
-
-  // const handleSubmit = useCallback(
-  //   (values) => {
-  //     dispatch(login(values, () => history('/')));
-  //   },
-  //   [history, dispatch],
-  // );
-
   const onChange = (checked) => {
     setState({ ...state, checked });
   };
 
-  // lock.on('authenticated', (authResult) => {
-  //   lock.getUserInfo(authResult.accessToken, (error) => {
-  //     if (error) {
-  //       return;
-  //     }
-
-  //     handleSubmit();
-  //     lock.hide();
-  //   });
-  // });
   const handleSubmit = (values) => {
     console.log('values', values);
+    if (values) {
+      setIsLoggedIn(true);
+    }
   };
 
   return (
@@ -56,7 +30,7 @@ function SignIn() {
       <Col xxl={6} xl={8} md={12} sm={18} xs={24}>
         <div className="mt-6 bg-white rounded-md dark:bg-white10 shadow-regular dark:shadow-none">
           <div className="px-5 py-4 text-center border-b border-gray-200 dark:border-white10">
-            <h2 className="mb-0 text-xl font-semibold text-dark dark:text-white87">Sign in 2BRCIC </h2>
+            <h2 className="mb-0 text-xl font-semibold text-dark dark:text-white87">Sign In </h2>
           </div>
           <div className="px-10 pt-8 pb-6">
             <Form name="login" form={form} onFinish={handleSubmit} layout="vertical">

@@ -18,10 +18,10 @@ function DemoEight() {
       path: 'index',
       breadcrumbName: 'Dashboard',
     },
-    {
-      path: 'first',
-      breadcrumbName: 'Demo 8',
-    },
+    // {
+    //   path: 'first',
+    //   breadcrumbName: 'Demo 8',
+    // },
   ];
   return (
     <>
@@ -58,7 +58,7 @@ function DemoEight() {
               <MonthlyEarning />
             </Suspense>
           </Col>
-          <Col xxl={8} lg={12} xs={24} className="mb-[25px]">
+          {/* <Col xxl={8} lg={12} xs={24} className="mb-[25px]">
             <Suspense
               fallback={
                 <Cards headless>
@@ -68,8 +68,8 @@ function DemoEight() {
             >
               <ProfitGrowth />
             </Suspense>
-          </Col>
-          <Col xxl={8} lg={12} xs={24} className="lg:mb-[25px]">
+          </Col> */}
+          {/* <Col xxl={8} lg={12} xs={24} className="lg:mb-[25px]">
             <Suspense
               fallback={
                 <Cards headless>
@@ -79,8 +79,8 @@ function DemoEight() {
             >
               <TotalEarning />
             </Suspense>
-          </Col>
-          <Col xxl={16} xs={24} className="mb-[25px]">
+          </Col> */}
+          {/* <Col xxl={16} xs={24} className="mb-[25px]">
             <Suspense
               fallback={
                 <Cards headless>
@@ -90,7 +90,7 @@ function DemoEight() {
             >
               <ActiveUser />
             </Suspense>
-          </Col>
+          </Col> */}
           <Col xxl={8} xs={24} className="3xl:mb-[25px]">
             <Suspense
               fallback={
@@ -102,7 +102,7 @@ function DemoEight() {
               <SalesOverview />
             </Suspense>
           </Col>
-          <Col xxl={8} lg={12} xs={24} className="lg:mb-[25px]">
+          {/* <Col xxl={8} lg={12} xs={24} className="lg:mb-[25px]">
             <Suspense
               fallback={
                 <Cards headless>
@@ -123,7 +123,7 @@ function DemoEight() {
             >
               <RecentDeals />
             </Suspense>
-          </Col>
+          </Col> */}
         </Row>
       </main>
     </>

@@ -1,33 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
+import { useAtom } from 'jotai';
 import store from './redux/store';
 import Admin from './routes/admin';
-// import Auth from './routes/auth';
+import Auth from './routes/auth';
 import './static/css/style.css';
 import config from './config/config';
-// import ProtectedRoute from './components/utilities/protectedRoute';
+import ProtectedRoute from './components/utilities/protectedRoute';
 import 'antd/dist/antd.less';
+import { isCurrentUser } from './globalStore';
 
-// const NotFound = lazy(() => import('./container/pages/404'));
+const NotFound = lazy(() => import('./container/pages/404'));
 
 const { theme } = config;
 
 function ProviderConfig() {
-  const { rtl, isLoggedIn, topMenu, mainContent } = useSelector((state) => {
+  const [isLoggedIn] = useAtom(isCurrentUser);
+  const { rtl, topMenu, mainContent } = useSelector((state) => {
     return {
       rtl: state.ChangeLayoutMode.rtlData,
       topMenu: state.ChangeLayoutMode.topMenu,
       mainContent: state.ChangeLayoutMode.mode,
-      isLoggedIn: state.auth.login,
+      // isLoggedIn: state.auth.login,
     };
   });
 
   console.log('isLoggedIn', isLoggedIn);
 
-  const [, setPath] = useState(window.location.pathname);
+  const [path, setPath] = useState(window.location.pathname);
 
   useEffect(() => {
     let unmounted = false;
@@ -42,17 +45,9 @@ function ProviderConfig() {
     <ConfigProvider direction={rtl ? 'rtl' : 'ltr'}>
       <ThemeProvider theme={{ ...theme, rtl, topMenu, mainContent }}>
         <Router>
-          <Routes>
-            {/* <Route path="/*" element={<ProtectedRoute path="/*" Component={Admin} />} /> */}
-            {/* //todo: ALL ROUTES ✅ */}
-            <Route path="/*" element={<Admin />} />
-            {/* <Route path="*" element={<NotFound />} /> */}
-          </Routes>
-        </Router>
-        {/* <Router basename={process.env.PUBLIC_URL}>
           {!isLoggedIn ? (
             <Routes>
-              <Route path="/*" element={<Auth />} />{' '}
+              <Route path="/*" element={<Auth />} />
             </Routes>
           ) : (
             <Routes>
@@ -60,12 +55,12 @@ function ProviderConfig() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           )}
-          {isLoggedIn && (path === process.env.PUBLIC_URL || path === `${process.env.PUBLIC_URL}/`) && (
+          {isLoggedIn && (
             <Routes>
               <Route path="/" element={<Navigate to="/" />} />
             </Routes>
           )}
-        </Router> */}
+        </Router>
       </ThemeProvider>
     </ConfigProvider>
   );

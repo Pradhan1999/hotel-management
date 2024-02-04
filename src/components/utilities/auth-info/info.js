@@ -10,9 +10,9 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from './Search';
-import Message from './Message';
+// import Message from './Message';
 import Notification from './Notification';
-import Settings from './settings';
+// import Settings from './settings';
 import { Popover } from '../../popup/popup';
 import Heading from '../../heading/heading';
 import { logOut } from '../../../redux/authentication/actionCreator';
@@ -29,8 +29,8 @@ const AuthInfo = React.memo(() => {
 
   const userContent = (
     <div>
-      <div className="min-w-[280px] sm:min-w-full pt-4">
-        <figure className="flex items-center text-sm rounded-[8px] bg-section dark:bg-white10 py-[20px] px-[25px] mb-[12px]">
+      <div className="min-w-[220px] sm:min-w-full pt-">
+        {/* <figure className="flex items-center text-sm rounded-[8px] bg-section dark:bg-white10 py-[20px] px-[25px] mb-[12px]">
           <img className="ltr:mr-4 rtl:ml-4" src={require('../../../static/img/avatar/chat-auth.png')} alt="" />
           <figcaption>
             <Heading as="h5">{currentUser.name}</Heading>
@@ -40,8 +40,8 @@ const AuthInfo = React.memo(() => {
                 : 'Fleet owner'}
             </p>
           </figcaption>
-        </figure>
-        <ul className="mb-0">
+        </figure> */}
+        <ul className="mb-1">
           <li>
             <Link
               to="#"
@@ -50,7 +50,7 @@ const AuthInfo = React.memo(() => {
               <UilUser className="w-4 h-4 ltr:mr-3 rtl:ml-3" /> Profile
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               to="#"
               className="inline-flex items-center hover:bg-shadow-transparent text-light dark:text-white60 dark:hover:text-white hover:text-primary dark:hover:bg-white10 dark:rounded-4 hover:pl-6 w-full px-2.5 py-3 text-sm transition-all ease-in-out delay-150"
@@ -81,7 +81,7 @@ const AuthInfo = React.memo(() => {
             >
               <UilBell className="w-4 h-4 ltr:mr-3 rtl:ml-3" /> Help
             </Link>
-          </li>
+          </li> */}
         </ul>
         <Link
           to="#"
@@ -99,10 +99,10 @@ const AuthInfo = React.memo(() => {
       <div className="md:hidden">
         <Search />
       </div>
-      <Message />
+      {/* <Message /> */}
       <Notification />
-      <Settings />
-      <div className="flex ltr:ml-3 rtl:mr-3 ltr:mr-4 rtl:ml-4 ssm:mr-0 ssm:rtl:ml-0">
+      {/* <Settings /> */}
+      <div className="flex ltr:ml-1 rtl:mr-1 ltr:mr-2 rtl:ml-2 ssm:mr-0 ssm:rtl:ml-0">
         <Popover placement="bottomRight" content={userContent} action="click">
           <Link to="#" className="flex items-center text-light whitespace-nowrap">
             <Avatar src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/matureman1-512.png" />

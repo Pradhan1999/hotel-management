@@ -19,7 +19,7 @@ function OverviewCardMesh({ data, circleIcon }) {
   const totalNumber = Number(total);
   return (
     <div
-      className={`relative p-[25px] 3xl:p-5 after:absolute after:top-1/2 after:-translate-y-1/2 ltr:after:-right-[60px] ltr:3xl:after:right-0 rtl:after:-left-[60px] rtl:3xl:after:left-0 ltr:sm:after:left-1/2 sm:after:-translate-x-1/2 sm:after:top-full after:w-[1px] sm:after:w-[70%] after:h-[70px] sm:after:h-[1px] after:bg-regular dark:after:bg-white10 last:after:hidden ${
+      className={`relative p-[25px] 3xl:p-3 after:absolute after:top-1/2 after:-translate-y-1/2 ltr:after:-right-[60px] ltr:3xl:after:right-0 rtl:after:-left-[60px] rtl:3xl:after:left-0 ltr:sm:after:left-1/2 sm:after:-translate-x-1/2 sm:after:top-full after:w-[1px] sm:after:w-[70%] after:h-[70px] sm:after:h-[1px] after:bg-regular dark:after:bg-white10 last:after:hidden ${
         circleIcon ? 'hexadash-icon-circle' : ''
       }`}
     >

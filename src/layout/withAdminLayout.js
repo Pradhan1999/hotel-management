@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import SideMenuItems from './SideMenuItems';
-import CustomizerWrap from './overview/Customizer';
+// import CustomizerWrap from './overview/Customizer';
 import { FooterStyle, LayoutContainer, SmallScreenAuthInfo, TopMenuSearch } from './Style';
 import TopMenu from './TopMenu';
 import Search from '../components/utilities/auth-info/Search';
@@ -153,7 +153,7 @@ const ThemeLayout = (WrappedComponent) => {
                     ) : null}
                   </div>
                 </div>
-                <div className="flex border border-red-500 items-center justify-end flex-auto ltr:mr-[10px] rtl:ml-[10px] [&>div:first-child]:flex [&>div]:items-center ">
+                <div className="flex items-center justify-end flex-auto ltr:mr-[10px] rtl:ml-[10px] [&>div:first-child]:flex [&>div]:items-center ">
                   {topMenu && window.innerWidth > 991 && <TopMenu />}
                   <div className="flex flex-row items-center md:hidden">
                     {topMenu && window.innerWidth > 991 ? (

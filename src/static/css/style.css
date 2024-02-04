@@ -994,7 +994,7 @@ hr{
   @apply dark:text-dark;
 }
 .ant-popover-inner-content{
-  @apply dark:text-white60;
+  @apply dark:text-white60 !pt-1;
 }
 .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon .ant-steps-icon-dot{
   @apply dark:bg-white10;

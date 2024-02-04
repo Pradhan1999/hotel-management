@@ -4,9 +4,10 @@ import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { getMe } from '../../redux/me/actionCreator';
-import { login } from '../../globalStore';
+import { isCurrentUser } from '../../globalStore';
 
 const SecurityWrapper = ({ children }) => {
+  // todo:
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getMe());
@@ -15,13 +16,13 @@ const SecurityWrapper = ({ children }) => {
 };
 
 function ProtectedRoute({ Component, path }) {
-  const [isLoggedIn] = useAtom(login);
+  const [isLoggedIn] = useAtom(isCurrentUser);
   // const isLoggedIn = useSelector((state) => state.auth.login);
 
   return isLoggedIn ? (
     <SecurityWrapper>
       <Routes>
-        <Route element={<Component />} path={path} />{' '}
+        <Route element={<Component />} path={path} />
       </Routes>
     </SecurityWrapper>
   ) : (
