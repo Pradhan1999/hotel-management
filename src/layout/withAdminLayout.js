@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/prop-types */
 import UilEllipsisV from '@iconscout/react-unicons/icons/uil-ellipsis-v';
 import { Button, Col, Layout, Row } from 'antd';
 import propTypes from 'prop-types';
@@ -9,7 +6,6 @@ import { Scrollbars } from '@pezhmanparsaee/react-custom-scrollbars';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-// import MenueItems from './MenueItems';
 import SideMenuItems from './SideMenuItems';
 import CustomizerWrap from './overview/Customizer';
 import { FooterStyle, LayoutContainer, SmallScreenAuthInfo, TopMenuSearch } from './Style';
@@ -157,13 +153,13 @@ const ThemeLayout = (WrappedComponent) => {
                     ) : null}
                   </div>
                 </div>
-                <div className="flex items-center justify-between flex-auto ltr:mr-[10px] rtl:ml-[10px] [&>div:first-child]:flex [&>div]:items-center ">
-                  {topMenu && window.innerWidth > 991 ? <TopMenu /> : <CustomizerWrap rtl={rtl} />}
+                <div className="flex border border-red-500 items-center justify-end flex-auto ltr:mr-[10px] rtl:ml-[10px] [&>div:first-child]:flex [&>div]:items-center ">
+                  {topMenu && window.innerWidth > 991 && <TopMenu />}
                   <div className="flex flex-row items-center md:hidden">
                     {topMenu && window.innerWidth > 991 ? (
                       <TopMenuSearch>
                         <div className="flex top-right-wrap">
-                          <CustomizerWrap rtl={rtl} />
+                          {/* <CustomizerWrap rtl={rtl} /> */}
                           <AuthInfo />
                         </div>
                       </TopMenuSearch>
