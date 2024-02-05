@@ -1,26 +1,28 @@
 import { callApi } from '../apiUtils';
-import roomsEndpoints from '../endpoints/rooms';
 
-export const addRooms = async ({ body }) =>
-  callApi({
-    uriEndPoint: {
-      ...roomsEndpoints.addRooms,
-    },
-    body,
-  });
+const addRooms = async ({ body }) => {
+  const response = await callApi.post(`/rooms`, body);
+  return response;
+};
 
-export const getAllRooms = async ({ query }) =>
-  callApi({
-    uriEndPoint: {
-      ...roomsEndpoints.getAllRooms,
-    },
-    query,
-  });
+const getAllRooms = async ({ start, limit }) => {
+  const response = await callApi.get(`/rooms?start=${start}&&limit=${limit}`);
+  return response;
+};
 
-export const getSingleRoom = async ({ pathParams }) =>
-  callApi({
-    uriEndPoint: {
-      ...roomsEndpoints.getSingleRoom,
-    },
-    pathParams,
-  });
+const getSingleRoom = async ({ id }) => {
+  const response = await callApi.get(`/rooms/${id}`);
+  return response;
+};
+
+const updateRoom = async ({ id, body }) => {
+  const response = await callApi.put(`/rooms/${id}`, body);
+  return response;
+};
+
+const deleteRoom = async (questionId) => {
+  const response = await callApi.delete(`/rooms/${questionId}`);
+  return response;
+};
+
+export { addRooms, getAllRooms, getSingleRoom, updateRoom, deleteRoom };

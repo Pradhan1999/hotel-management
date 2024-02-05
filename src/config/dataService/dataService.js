@@ -7,10 +7,8 @@ const hostname = () => {
   switch (window.location.hostname) {
     case 'localhost': // dev
       hostUrl = 'http://localhost:4000/api';
-      // hostUrl = 'https://broker.upforks.com/api';
       break;
     default:
-      // hostUrl = 'https://brcic.upforks.com/api';
       hostUrl = 'http://localhost:4000/api';
       break;
   }

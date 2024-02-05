@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { useAtom } from 'jotai';
 import { Checkbox } from '../../../../components/checkbox/checkbox';
 import { isCurrentUser } from '../../../../globalStore';
+import { loginUser } from '../../../../utility/services/auth';
+import { setItem } from '../../../../utility/localStorageControl';
 
 function SignIn() {
   const isLoading = useSelector((state) => state.auth.loading);
@@ -21,7 +23,20 @@ function SignIn() {
   const handleSubmit = (values) => {
     console.log('values', values);
     if (values) {
-      setIsLoggedIn(true);
+      const body = {
+        email: values?.email,
+        password: values?.password,
+      };
+
+      loginUser(body)
+        .then((res) => {
+          if (res?.data) {
+            setItem('authorization', res?.data?.accessToken);
+            setItem('isLogin', true);
+            setIsLoggedIn(true);
+          }
+        })
+        .catch((err) => console.log('err', err));
     }
   };
 

@@ -5,9 +5,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { getMe } from '../../redux/me/actionCreator';
 import { isCurrentUser } from '../../globalStore';
+import { getItem } from '../../utility/localStorageControl';
 
 const SecurityWrapper = ({ children }) => {
-  // todo:
+  // todo: me api
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getMe());
@@ -16,7 +17,8 @@ const SecurityWrapper = ({ children }) => {
 };
 
 function ProtectedRoute({ Component, path }) {
-  const [isLoggedIn] = useAtom(isCurrentUser);
+  // const [isLoggedIn] = useAtom(isCurrentUser);
+  const isLoggedIn = getItem('isLogin');
   // const isLoggedIn = useSelector((state) => state.auth.login);
 
   return isLoggedIn ? (

@@ -12,13 +12,15 @@ import config from './config/config';
 import ProtectedRoute from './components/utilities/protectedRoute';
 import 'antd/dist/antd.less';
 import { isCurrentUser } from './globalStore';
+import { getItem } from './utility/localStorageControl';
 
 const NotFound = lazy(() => import('./container/pages/404'));
 
 const { theme } = config;
 
 function ProviderConfig() {
-  const [isLoggedIn] = useAtom(isCurrentUser);
+  // const [isLoggedIn] = useAtom(isCurrentUser);
+  const isLoggedIn = getItem('isLogin');
   const { rtl, topMenu, mainContent } = useSelector((state) => {
     return {
       rtl: state.ChangeLayoutMode.rtlData,
@@ -27,8 +29,6 @@ function ProviderConfig() {
       // isLoggedIn: state.auth.login,
     };
   });
-
-  console.log('isLoggedIn', isLoggedIn);
 
   const [path, setPath] = useState(window.location.pathname);
 

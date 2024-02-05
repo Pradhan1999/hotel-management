@@ -1,80 +1,140 @@
-import Axios from 'axios';
-import { Cookies } from 'react-cookie';
-import queryString from 'querystring';
+/* eslint-disable no-underscore-dangle */
+import axios from 'axios';
+import { getItem, clearAll } from './localStorageControl';
 
-export const hostname = () => {
+const hostname = () => {
   let hostUrl = '';
-
-  // hostUrl = 'https://hotel-backend-ahus.onrender.com/public';
-  hostUrl = 'http://localhost:4000/api';
-
+  switch (window.location.hostname) {
+    case 'localhost': // dev
+      hostUrl = 'http://localhost:4000/api';
+      // hostUrl = 'https://hotel-backend-ahus.onrender.com/public';
+      break;
+    default:
+      hostUrl = 'http://localhost:4000/api';
+      break;
+  }
   return hostUrl;
 };
 
-export const cookies = new Cookies();
-
-const hostUrl = hostname();
-
-export const makeUrl = ({ uri, pathParams, query, version }, host) => {
-  return `${host || hostUrl}${version}${uri
-    .split('/')
-    .map((param) => (param.charAt(0) === ':' ? encodeURI(pathParams?.[param.slice(1)] || '') : param))
-    .join('/')}${query ? `?${queryString.stringify(query)}` : ''}`;
-};
-
-export const getDefaultHeaders = () => ({
-  authorization: typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null,
-  'Content-Type': 'application/json',
+const authHeader = () => ({
+  Authorization: `Bearer ${getItem('access_token')}`,
 });
 
-const callAxios = ({ uriEndPoint, pathParams, query, body, apiHostUrl }) =>
-  Axios({
-    method: uriEndPoint.method,
-    url: makeUrl({ ...uriEndPoint, pathParams, query }, apiHostUrl),
-    withCredentials: true,
-    headers: {
-      ...getDefaultHeaders(),
-      ...uriEndPoint.headerProps,
-    },
-    data: body || {},
-  });
+const client = axios.create({
+  baseURL: hostname(),
+  headers: {
+    Authorization: `Bearer ${getItem('access_token')}`,
+    'Content-Type': 'application/json',
+  },
+});
 
-const callMockios = ({ uriEndPoint, pathParams, query, body }) =>
-  Axios({
-    method: uriEndPoint.method,
-    url: makeUrl(
-      { ...uriEndPoint, pathParams, query },
-      `${window.location.protocol}//${window.location.hostname}:3030`,
-    ),
-    headers: {
-      ...getDefaultHeaders(),
-      ...uriEndPoint.headerProps,
-    },
-    data: body || {},
-  });
+const addQueryParamsToUrl = (url, pathParams) => {
+  let urlPath = `${url}?`;
+  if (pathParams) {
+    Object.entries(pathParams).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') urlPath = urlPath.concat(`${key}=${value}&`);
+    });
+  }
+  return urlPath;
+};
 
-// main function 👇
-export function callApi({ uriEndPoint, pathParams, query, body, apiHostUrl, mock }) {
-  return new Promise((resolve, reject) => {
-    let callGenericApi = callAxios;
-    if (mock) callGenericApi = callMockios;
-    callGenericApi({
-      uriEndPoint,
-      pathParams,
-      query,
-      body,
-      apiHostUrl,
-    })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (!err.response) {
-          reject({ isServerUnreachable: true });
+class callApi {
+  static get(path = '') {
+    return client({
+      method: 'GET',
+      url: path,
+      headers: { ...authHeader() },
+    });
+  }
 
-          return;
-        }
-        reject(err);
-      });
-  });
+  static post(path = '', data = {}, optionalHeader = {}) {
+    return client({
+      method: 'POST',
+      url: path,
+      data,
+      headers: { ...authHeader(), ...optionalHeader },
+    });
+  }
+
+  static patch(path = '', data = {}) {
+    return client({
+      method: 'PATCH',
+      url: path,
+      data: JSON.stringify(data),
+      headers: { ...authHeader() },
+    });
+  }
+
+  static put(path = '', data = {}, optionalHeader = {}) {
+    return client({
+      method: 'PUT',
+      url: path,
+      data,
+      headers: { ...authHeader(), ...optionalHeader },
+    });
+  }
+
+  static delete(path = '', data = {}) {
+    return client({
+      method: 'DELETE',
+      url: path,
+      data: JSON.stringify(data),
+      headers: { ...authHeader() },
+    });
+  }
 }
+
+/**
+ * axios interceptors runs before and after a request, letting the developer modify req,req more
+ * For more details on axios interceptor see https://github.com/axios/axios#interceptors
+ */
+client.interceptors.request.use((config) => {
+  // do something before executing the request
+  // For example tag along the bearer access token to request header or set a cookie
+  const requestConfig = config;
+  const { headers } = config;
+  requestConfig.headers = { ...headers, Authorization: `Bearer ${getItem('access_token')}` };
+
+  return requestConfig;
+});
+
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    /**
+     * Do something in case the response returns an error code [3**, 4**, 5**] etc
+     * For example, on token expiration retrieve a new access token, retry a failed request etc
+     */
+    const { response } = error;
+    const originalRequest = error.config;
+    if (response) {
+      if (response.status === 401) {
+        // if the error is 401 and hasn't already been retried
+        if (!originalRequest._retry) {
+          originalRequest._retry = true; // now it can be retried
+          const refreshToken = getItem('refresh_token');
+          return client
+            .post('/auth/refresh-token', { refreshToken })
+            .then((res) => {
+              if (res.status === 200) {
+                // save the new tokens
+                // update the header with the new token
+                client.defaults.headers.common.Authorization = `Bearer ${res.data.data.token}`;
+                // retry the request that errored out
+                return client(originalRequest);
+              }
+            })
+            .catch((err) => {
+              console.log('error', err);
+              console.log('asdasdads');
+              clearAll();
+              window.location.href = `${window.location.hostname}/login`;
+              // window.location.reload();
+            });
+        }
+      }
+    }
+    return Promise.reject(error.response.data.error);
+  },
+);
+export { callApi, addQueryParamsToUrl };
