@@ -6,7 +6,7 @@ const addRooms = async ({ body }) => {
 };
 
 const getAllRooms = async ({ start, limit }) => {
-  const response = await callApi.get(`/rooms?start=${start}&&limit=${limit}`);
+  const response = await callApi.get(`/rooms?start=${start}&limit=${limit}`);
   return response;
 };
 

@@ -73,6 +73,13 @@ function MenuItems({ toggleCollapsed }) {
       'users',
       !topMenu && <UilShieldCheck />,
     ),
+    getItem(
+      <NavLink onClick={toggleCollapsed} to={'/cms'}>
+        {t('cms')}
+      </NavLink>,
+      'cms',
+      !topMenu && <UilShieldCheck />,
+    ),
     // getItem(
     //   <NavLink onClick={toggleCollapsed} to={`${path}testList`}>
     //     {t('Test list')}
