@@ -5,7 +5,7 @@ import { getItem, clearAll } from './localStorageControl';
 const hostname = () => {
   let hostUrl = '';
   switch (window.location.hostname) {
-    case 'localhost': // dev
+    case 'localhost1': // dev
       hostUrl = 'http://localhost:4000/api';
       break;
     default:

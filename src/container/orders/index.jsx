@@ -3,26 +3,26 @@ import { Row, Col, Button, Table } from 'antd';
 import { GlobalUtilityStyle } from '../styled';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { getAllUser } from '../../utility/services/users';
+import { getAllOrder } from '../../utility/services/orders';
 
 const Users = () => {
-  const [allUser, setAllUser] = useState([]);
+  const [allOrder, setAllOrder] = useState([]);
   const PageRoutes = [
     {
       path: '/',
       breadcrumbName: 'Dashboard',
     },
     {
-      path: '/users',
-      breadcrumbName: 'Users',
+      path: '/orders',
+      breadcrumbName: 'Orders',
     },
   ];
 
   const getAllUsers = () => {
-    getAllUser({})
+    getAllOrder({})
       .then((res) => {
         if (res) {
-          setAllUser(res?.data?.data);
+          setAllOrder(res?.data?.data);
         }
       })
       .catch((err) => console.log('err', err));
@@ -34,26 +34,32 @@ const Users = () => {
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'customerName',
+      key: 'customerName',
       width: 150,
     },
     {
       title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      dataIndex: 'customerEmail',
+      key: 'customerEmail',
       width: 150,
     },
     {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
+      title: 'Check In Time',
+      dataIndex: 'checkInDate',
+      key: 'checkInDate',
       width: 150,
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      key: 'gender',
+      title: 'Check Out Time',
+      dataIndex: 'checkOutDate',
+      key: 'checkOutDate',
+      width: 150,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
       width: 150,
     },
   ];
@@ -61,15 +67,15 @@ const Users = () => {
   return (
     <>
       <PageHeader
-        title="Users"
+        title="Orders"
         routes={PageRoutes}
         className="flex items-center justify-between px-8 xl:px-[15px] pt-2 pb-6 sm:pb-[30px] bg-transparent sm:flex-col"
       />
       <GlobalUtilityStyle className="p-3  ">
         <Row gutter={16}>
           <Col sm={24} xs={24} lg={24} className="">
-            <Cards moreBtn={<Button type="primary">Add</Button>} title="Users" border={false} size="default">
-              <Table scroll={{ x: '100%', y: 'auto' }} columns={columns} dataSource={allUser} />
+            <Cards moreBtn={<Button type="primary">Add</Button>} title="Orders" border={false} size="default">
+              <Table scroll={{ x: '100%', y: 'auto' }} columns={columns} dataSource={allOrder} />
             </Cards>
           </Col>
         </Row>

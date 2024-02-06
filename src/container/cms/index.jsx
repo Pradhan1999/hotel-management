@@ -114,13 +114,13 @@ const Rooms = () => {
                     />
                   </div>
                   <div>
-                    <Search
+                    {/* <Search
                       placeholder="Search by room name"
                       allowClear
                       enterButton="Search"
                       size="middle"
                       onSearch={onSearch}
-                    />
+                    /> */}
                   </div>
                 </div>
               }
