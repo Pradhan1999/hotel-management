@@ -1,46 +1,68 @@
-import { Button, Form, Input, InputNumber, Select, Upload, message } from 'antd';
+import { Button, Form, Input, InputNumber, Modal, Select, Upload, message } from 'antd';
 import React, { useState } from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, EyeOutlined, DeleteOutlined, LinkOutlined } from '@ant-design/icons';
 import { addRooms } from '../../utility/services/rooms';
+import { uploadImage } from '../../utility/services/upload';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
 const AddRoom = ({ setisAddRoom, isEditRoom, setIsEditRoom, getAllRoomList }) => {
-  const [fileList, setFileList] = useState([]);
-  console.log('fileList', fileList);
+  const [contents, setContents] = useState([]);
+  const [previewImage, setPreviewImage] = useState();
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewTitle, setPreviewTitle] = useState();
+  const [firstImageUpload, setFirstImageUpload] = useState(false);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const handleChange = (info) => {
-    let newFileList = [...info.fileList];
+    setUploadLoading(true);
+    setFirstImageUpload(true);
+    setContents((prev) => [...prev, info.file.originFileObj]);
+    const formData = new FormData();
+    formData.append('file', info.file.originFileObj);
 
-    newFileList = newFileList.map((file) => {
-      if (file.response) {
-        file.url = file.response.url;
-      }
-      return file?.originFileObj;
-    });
-    setFileList(newFileList);
+    uploadImage(formData)
+      .then((res) => {
+        setImageUrls((prev) => [...prev, { id: info.file.uid, name: res?.data?.name }]);
+        setUploadLoading(false);
+      })
+      .catch((err) => {
+        console.log('err', err);
+        setUploadLoading(false);
+      });
   };
+
+  const handlePreview = async (file_) => {
+    const file = file_;
+    setPreviewImage(file?._id ? file?.url : URL.createObjectURL(file));
+    setPreviewVisible(true);
+    setPreviewTitle(file?.name || file?.url.substring(file?.url.lastIndexOf('/') + 1));
+  };
+
   const onFinish = (values) => {
     const body = {
       roomNumber: values?.roomNumber,
       type: values?.type,
       status: values?.status,
       price: values?.price,
-      // images: values?.roomNumber,
+      images: imageUrls && imageUrls.map((item) => item?.name),
     };
 
     addRooms({
       body: body,
     })
       ?.then((res) => {
-        console.log('res', res);
+        message.success('Room added successfully');
+        setisAddRoom(false);
         getAllRoomList();
       })
       .catch((err) => {
         console.log('err :>> ', err);
       });
   };
+
   return (
     <>
       <div>
@@ -103,11 +125,47 @@ const AddRoom = ({ setisAddRoom, isEditRoom, setIsEditRoom, getAllRoomList }) =>
           </Form.Item>
 
           <Form.Item label="Image" name="image">
-            <Upload multiple={true} onChange={handleChange} fileList={fileList}>
+            <Upload onChange={handleChange} fileList={[]}>
               <Button className="flex items-center" icon={<UploadOutlined />}>
                 Click to Upload
               </Button>
             </Upload>
+            <div className="w-full" style={{ maxHeight: '230px', overflowY: 'auto' }}>
+              {contents?.length > 0 &&
+                contents?.map((val) => (
+                  <div key={val?.url} className="flex border rounded-md justify-between items-center p-1 px-3 my-1">
+                    <div className="flex">
+                      <span className="mr-2">
+                        <LinkOutlined />
+                      </span>
+                      {val?.url ? val?.url?.substring(val?.url.lastIndexOf('/') + 1) : val?.name}
+                    </div>
+                    <div className="flex gap-3 text-base">
+                      <div className="cursor-pointer">
+                        {firstImageUpload && (
+                          <div
+                            onClick={() => {
+                              handlePreview(val);
+                            }}
+                          >
+                            <EyeOutlined />
+                          </div>
+                        )}
+                      </div>
+                      <div className="cursor-pointer">
+                        <div
+                          onClick={() => {
+                            const files = contents?.filter((v) => v?.uid !== val?.uid || v?._id !== val?._id);
+                            setContents(files);
+                          }}
+                        >
+                          <DeleteOutlined style={{ color: 'red' }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
           </Form.Item>
 
           <div className="flex justify-end gap-2">
@@ -115,16 +173,29 @@ const AddRoom = ({ setisAddRoom, isEditRoom, setIsEditRoom, getAllRoomList }) =>
               onClick={() => {
                 setisAddRoom(false);
                 setIsEditRoom({ isOpen: false, roomId: '' });
+                setImageUrls([]);
               }}
             >
               Cancel
             </Button>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={uploadLoading}>
               Submit
             </Button>
           </div>
         </Form>
       </div>
+      <Modal
+        // width="1200px"
+        width={410}
+        title={previewTitle}
+        // bodyStyle={{ height: 800 }}
+        visible={previewVisible}
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
+      >
+        {/* <iframe title="iframe" src={previewImage} style={{ width: '400px' }} /> */}
+        <img src={previewImage} alt={previewImage} style={{ width: '400px' }} className="object-contain" />
+      </Modal>
     </>
   );
 };
