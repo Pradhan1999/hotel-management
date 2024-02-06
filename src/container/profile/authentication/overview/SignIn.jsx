@@ -21,7 +21,6 @@ function SignIn() {
   };
 
   const handleSubmit = (values) => {
-    console.log('values', values);
     if (values) {
       const body = {
         email: values?.email,
@@ -34,6 +33,7 @@ function SignIn() {
             setItem('authorization', res?.data?.accessToken);
             setItem('isLogin', true);
             setIsLoggedIn(true);
+            window.location.replace('/');
           }
         })
         .catch((err) => console.log('err', err));

@@ -16,6 +16,7 @@ import Notification from './Notification';
 import { Popover } from '../../popup/popup';
 import Heading from '../../heading/heading';
 import { logOut } from '../../../redux/authentication/actionCreator';
+import { clearAll } from '../../../utility/localStorageControl';
 
 const AuthInfo = React.memo(() => {
   const dispatch = useDispatch();
@@ -24,7 +25,8 @@ const AuthInfo = React.memo(() => {
 
   const SignOut = (e) => {
     e.preventDefault();
-    dispatch(logOut(() => navigate('/')));
+    clearAll();
+    window.location.replace('/');
   };
 
   const userContent = (
