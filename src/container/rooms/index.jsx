@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Modal, Carousel, Select, Input } from 'antd';
+import { Row, Col, Button, Modal, Carousel, Select, Input, Popconfirm } from 'antd';
 
 import { Space, Table, Tag } from 'antd';
 import AddRoom from './AddRoom';
@@ -18,65 +18,9 @@ const contentStyle = {
   borderRadius: '10px',
 };
 
-const columns = [
-  {
-    title: 'Images',
-    dataIndex: 'images',
-    key: 'images',
-    render: (_, record) => (
-      <div>
-        <Carousel autoplay>
-          {record?.images?.map((img, idx) => (
-            <div key={idx}>
-              <img src={img} alt={img} style={contentStyle} />
-            </div>
-          ))}
-        </Carousel>
-      </div>
-    ),
-    width: 160,
-  },
-  {
-    title: 'Room Number',
-    dataIndex: 'roomNumber',
-    alignItem: 'center',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
-    width: 140,
-  },
-  {
-    title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
-    width: 140,
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
-    width: 150,
-  },
-  {
-    title: 'Price',
-    dataIndex: 'price',
-    key: 'price',
-    width: 150,
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-    width: 150,
-  },
-];
-
 const Rooms = () => {
   const [isAddRoom, setisAddRoom] = useState(false);
+  const [isEditRoom, setIsEditRoom] = useState({ isOpen: false, roomId: '' });
   const [allRooms, setAllRooms] = useState([]);
 
   const PageRoutes = [
@@ -87,6 +31,75 @@ const Rooms = () => {
     {
       path: '/rooms',
       breadcrumbName: 'Rooms',
+    },
+  ];
+
+  const columns = [
+    // {
+    //   title: 'Images',
+    //   dataIndex: 'images',
+    //   key: 'images',
+    //   render: (_, record) => (
+    //     <div>
+    //       <Carousel autoplay>
+    //         {record?.images?.map((img, idx) => (
+    //           <div key={idx}>
+    //             <img src={img} alt={img} style={contentStyle} />
+    //           </div>
+    //         ))}
+    //       </Carousel>
+    //     </div>
+    //   ),
+    //   width: 160,
+    // },
+    {
+      title: 'Room Number',
+      dataIndex: 'roomNumber',
+      alignItem: 'center',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+      width: 140,
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+      width: 140,
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+      width: 150,
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
+      width: 150,
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <Button size="middle" onClick={() => setIsEditRoom({ isOpen: true, roomId: record?._id })}>
+            Edit
+          </Button>
+          <Popconfirm
+            title="Are you sure to delete this task?"
+            // todo: delete api
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger size="middle">
+              Delete
+            </Button>
+          </Popconfirm>
+        </Space>
+      ),
+      width: 150,
     },
   ];
 
@@ -125,6 +138,7 @@ const Rooms = () => {
                       style={{
                         width: 120,
                       }}
+                      size="middle"
                       placeholder="Type"
                       // onChange={handleChange}
                       options={[
@@ -170,14 +184,22 @@ const Rooms = () => {
       </GlobalUtilityStyle>
 
       <Modal
-        title="Add Room"
+        title={`${isAddRoom ? 'Add Room' : 'Edit Room'}`}
         destroyOnClose
-        open={isAddRoom}
+        open={isAddRoom || isEditRoom.isOpen}
         // onOk={handleAddRooms}
         footer={false}
-        onCancel={() => setisAddRoom(false)}
+        onCancel={() => {
+          setisAddRoom(false);
+          setIsEditRoom({ isOpen: false, roomId: '' });
+        }}
       >
-        <AddRoom setisAddRoom={setisAddRoom} />
+        <AddRoom
+          setisAddRoom={setisAddRoom}
+          isEditRoom={isEditRoom}
+          setIsEditRoom={setIsEditRoom}
+          getAllRoomList={getAllRoomList}
+        />
       </Modal>
     </>
   );

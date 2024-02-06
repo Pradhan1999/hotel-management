@@ -1,25 +1,25 @@
 import propTypes from 'prop-types';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { getMe } from '../../redux/me/actionCreator';
-import { isCurrentUser } from '../../globalStore';
 import { getItem } from '../../utility/localStorageControl';
+import { currentUser } from '../../utility/services/auth';
+import { currentUserData } from '../../globalStore';
 
 const SecurityWrapper = ({ children }) => {
-  // todo: me api
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getMe());
-  }, []);
+  const [_, setUser] = useAtom(currentUserData);
+
+  // useEffect(() => {
+  //   currentUser()
+  //     .then((res) => setUser(res?.data?.user))
+  //     .catch((err) => console.log('err', err));
+  // }, []);
+
   return children;
 };
 
 function ProtectedRoute({ Component, path }) {
-  // const [isLoggedIn] = useAtom(isCurrentUser);
   const isLoggedIn = getItem('isLogin');
-  // const isLoggedIn = useSelector((state) => state.auth.login);
 
   return isLoggedIn ? (
     <SecurityWrapper>

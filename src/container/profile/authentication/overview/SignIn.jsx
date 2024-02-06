@@ -30,7 +30,7 @@ function SignIn() {
       loginUser(body)
         .then((res) => {
           if (res?.data) {
-            setItem('authorization', res?.data?.accessToken);
+            setItem('access_token', res?.data?.accessToken);
             setItem('isLogin', true);
             setIsLoggedIn(true);
             window.location.replace('/');

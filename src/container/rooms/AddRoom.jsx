@@ -1,22 +1,41 @@
 import { Button, Form, Input, InputNumber, Select, Upload, message } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { addRooms } from '../../utility/services/rooms';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-const AddRoom = ({ setisAddRoom }) => {
-  const onFinish = (values) => {
-    console.log(values);
+const AddRoom = ({ setisAddRoom, isEditRoom, setIsEditRoom, getAllRoomList }) => {
+  const [fileList, setFileList] = useState([]);
+  console.log('fileList', fileList);
 
-    const body = {};
+  const handleChange = (info) => {
+    let newFileList = [...info.fileList];
+
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        file.url = file.response.url;
+      }
+      return file?.originFileObj;
+    });
+    setFileList(newFileList);
+  };
+  const onFinish = (values) => {
+    const body = {
+      roomNumber: values?.roomNumber,
+      type: values?.type,
+      status: values?.status,
+      price: values?.price,
+      // images: values?.roomNumber,
+    };
 
     addRooms({
       body: body,
     })
       ?.then((res) => {
         console.log('res', res);
+        getAllRoomList();
       })
       .catch((err) => {
         console.log('err :>> ', err);
@@ -25,61 +44,8 @@ const AddRoom = ({ setisAddRoom }) => {
   return (
     <>
       <div>
-        {/* <Form name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-          <Form.Item
-            name={['user', 'name']}
-            label="Name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={['user', 'email']}
-            label="Email"
-            rules={[
-              {
-                type: 'email',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={['user', 'age']}
-            label="Age"
-            rules={[
-              {
-                type: 'number',
-                min: 0,
-                max: 99,
-              },
-            ]}
-          >
-            <InputNumber />
-          </Form.Item>
-          <Form.Item name={['user', 'website']} label="Website">
-            <Input />
-          </Form.Item>
-          <Form.Item name={['user', 'introduction']} label="Introduction">
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              ...layout.wrapperCol,
-              offset: 8,
-            }}
-          >
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form> */}
         <Form
-          name="basic"
+          name="Rooms"
           labelCol={{
             span: 8,
           }}
@@ -137,7 +103,7 @@ const AddRoom = ({ setisAddRoom }) => {
           </Form.Item>
 
           <Form.Item label="Image" name="image">
-            <Upload>
+            <Upload multiple={true} onChange={handleChange} fileList={fileList}>
               <Button className="flex items-center" icon={<UploadOutlined />}>
                 Click to Upload
               </Button>
@@ -145,7 +111,14 @@ const AddRoom = ({ setisAddRoom }) => {
           </Form.Item>
 
           <div className="flex justify-end gap-2">
-            <Button onClick={() => setisAddRoom(false)}>Cancel</Button>
+            <Button
+              onClick={() => {
+                setisAddRoom(false);
+                setIsEditRoom({ isOpen: false, roomId: '' });
+              }}
+            >
+              Cancel
+            </Button>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
