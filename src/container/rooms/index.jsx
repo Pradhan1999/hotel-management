@@ -119,7 +119,7 @@ const Rooms = () => {
           <Col sm={24} xs={24} lg={24} className="">
             <Cards
               title={
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <div className="font-normal">Sort By:</div>
                   <div>
                     <Select
@@ -141,6 +141,29 @@ const Rooms = () => {
                         {
                           value: 'Suite',
                           label: 'Suite',
+                        },
+                      ]}
+                    />
+                  </div>
+                  <div>
+                    <Select
+                      style={{
+                        width: 120,
+                      }}
+                      size="middle"
+                      placeholder="Status"
+                      options={[
+                        {
+                          value: 'Active',
+                          label: 'Active',
+                        },
+                        {
+                          value: 'InActive',
+                          label: 'InActive',
+                        },
+                        {
+                          value: 'Booked',
+                          label: 'Booked',
                         },
                       ]}
                     />
