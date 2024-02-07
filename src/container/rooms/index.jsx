@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Modal, Carousel, Select, Input, Popconfirm } from 'antd';
+import { Row, Col, Button, Modal, Carousel, Select, Input, Popconfirm, message } from 'antd';
 
 import { Space, Table, Tag } from 'antd';
 import AddRoom from './AddRoom';
 import { GlobalUtilityStyle } from '../styled';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { getAllRooms } from '../../utility/services/rooms';
-const { Search } = Input;
+import { deleteRoom, getAllRooms } from '../../utility/services/rooms';
 
-const contentStyle = {
-  height: '120px',
-  color: '#fff',
-  lineHeight: '130px',
-  textAlign: 'center',
-  background: '#364d79',
-  borderRadius: '10px',
-};
+const { Search } = Input;
 
 const Rooms = () => {
   const [isAddRoom, setisAddRoom] = useState(false);
@@ -35,23 +27,6 @@ const Rooms = () => {
   ];
 
   const columns = [
-    // {
-    //   title: 'Images',
-    //   dataIndex: 'images',
-    //   key: 'images',
-    //   render: (_, record) => (
-    //     <div>
-    //       <Carousel autoplay>
-    //         {record?.images?.map((img, idx) => (
-    //           <div key={idx}>
-    //             <img src={img} alt={img} style={contentStyle} />
-    //           </div>
-    //         ))}
-    //       </Carousel>
-    //     </div>
-    //   ),
-    //   width: 160,
-    // },
     {
       title: 'Room Number',
       dataIndex: 'roomNumber',
@@ -66,17 +41,23 @@ const Rooms = () => {
       key: 'type',
       width: 140,
     },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      width: 150,
-    },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'description',
+    //   key: 'description',
+    //   width: 150,
+    // },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
       width: 150,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      width: 140,
     },
     {
       title: 'Action',
@@ -88,8 +69,15 @@ const Rooms = () => {
           </Button>
           <Popconfirm
             title="Are you sure to delete this task?"
-            // todo: delete api
-            onConfirm={confirm}
+            onConfirm={() => {
+              deleteRoom({ id: record?._id })
+                .then((res) => {
+                  console.log('res', res);
+                  message.success('Room Deleted Successfully');
+                  getAllRoomList();
+                })
+                .catch((err) => console.log('err', err));
+            }}
             okText="Yes"
             cancelText="No"
           >
@@ -187,7 +175,6 @@ const Rooms = () => {
         title={`${isAddRoom ? 'Add Room' : 'Edit Room'}`}
         destroyOnClose
         open={isAddRoom || isEditRoom.isOpen}
-        // onOk={handleAddRooms}
         footer={false}
         onCancel={() => {
           setisAddRoom(false);

@@ -31,19 +31,6 @@ const Admin = React.memo(() => {
         <Route index path="users/*" element={<Users />} />
         <Route index path="cms/*" element={<Cms />} />
         <Route index path="orders/*" element={<Orders />} />
-        {/* <Route path="demo-2" element={<DemoTwo />} />
-        <Route path="demo-3" element={<DemoThree />} />
-        <Route path="demo-4" element={<DemoFour />} />
-        <Route path="demo-5" element={<DemoFive />} />
-        <Route path="demo-6" element={<DemoSix />} />
-        <Route path="demo-7" element={<DemoSeven />} />
-        <Route path="demo-8" element={<DemoEight />} />
-        <Route path="demo-9" element={<DemoNine />} />
-        <Route path="demo-10" element={<DemoTen />} /> */}
-        {/* <Route path="testList/*" element={<TestList />} />
-        <Route path="question-bank/*" element={<QuestionBank />} />
-        <Route path="customers/*" element={<Customers />} />
-        <Route path="contactUs/*" element={<ContactUs />} /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

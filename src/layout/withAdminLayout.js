@@ -214,9 +214,9 @@ const ThemeLayout = (WrappedComponent) => {
                     <Row>
                       <Col md={12} xs={24}>
                         <span className="inline-block w-full font-medium admin-footer__copyright md:text-center text-theme-gray dark:text-white60 md:mb-[10px]">
-                          © 2023
+                          © {new Date().getFullYear()}
                           <Link className="mx-[4px] text-primary" to="#">
-                            Hotel Management
+                            Hotel Varuna Grand
                           </Link>
                         </span>
                       </Col>

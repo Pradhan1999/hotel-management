@@ -20,8 +20,8 @@ const updateRoom = async ({ id, body }) => {
   return response;
 };
 
-const deleteRoom = async (questionId) => {
-  const response = await callApi.delete(`/rooms/${questionId}`);
+const deleteRoom = async ({ id }) => {
+  const response = await callApi.delete(`/rooms/${id}`);
   return response;
 };
 
