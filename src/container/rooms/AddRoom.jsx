@@ -77,9 +77,9 @@ const AddRoom = ({ setisAddRoom, isEditRoom, setIsEditRoom, getAllRoomList }) =>
   };
 
   useEffect(() => {
-    setLoading(true);
     // populate single room data
     if (isEditRoom?.roomId) {
+      setLoading(true);
       getSingleRoom({ id: isEditRoom?.roomId })
         .then((res) => {
           form.setFieldsValue(res?.data);

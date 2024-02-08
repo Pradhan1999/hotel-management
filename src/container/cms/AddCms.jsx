@@ -1,12 +1,50 @@
-import { Button, Form, Input, InputNumber, Select, Upload, message } from 'antd';
-import React from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Select, Upload, message } from 'antd';
+import React, { useState } from 'react';
+import { UploadOutlined, EyeOutlined, DeleteOutlined, LinkOutlined } from '@ant-design/icons';
 import { addRooms } from '../../utility/services/rooms';
+import { uploadImage } from '../../utility/services/upload';
 
 const { Option } = Select;
-const { TextArea } = Input;
 
 const AddRoom = ({ setisAddRoom }) => {
+  const [filesData, setFilesData] = useState([]);
+  const [previewImage, setPreviewImage] = useState('');
+  const [isPreviewModal, setIsPreviewModal] = useState(false);
+  const [previewTitle, setPreviewTitle] = useState();
+  const [loading, setLoading] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  const handleChange = (info) => {
+    setUploadLoading(true);
+
+    const formData = new FormData();
+    formData.append('file', info.file.originFileObj);
+
+    // uploadImage(formData)
+    //   .then((res) => {
+    setFilesData((prev) => [
+      ...prev,
+      {
+        id: info.file.uid,
+        file: info.file.originFileObj,
+        // name: res?.data?.name
+      },
+    ]);
+    setUploadLoading(false);
+    // })
+    // .catch((err) => {
+    //   message.error('Error while uploading');
+    //   setUploadLoading(false);
+    // });
+  };
+
+  const handlePreview = async (file_) => {
+    const file = file_;
+    setPreviewImage(file?.prodUrl ? file?.prodUrl : URL.createObjectURL(file?.file));
+    setIsPreviewModal(true);
+    setPreviewTitle(file?.file ? file?.file?.name : file?.name);
+  };
+
   const onFinish = (values) => {
     console.log(values);
 
@@ -25,76 +63,20 @@ const AddRoom = ({ setisAddRoom }) => {
   return (
     <>
       <div>
-        {/* <Form name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-          <Form.Item
-            name={['user', 'name']}
-            label="Name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={['user', 'email']}
-            label="Email"
-            rules={[
-              {
-                type: 'email',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name={['user', 'age']}
-            label="Age"
-            rules={[
-              {
-                type: 'number',
-                min: 0,
-                max: 99,
-              },
-            ]}
-          >
-            <InputNumber />
-          </Form.Item>
-          <Form.Item name={['user', 'website']} label="Website">
-            <Input />
-          </Form.Item>
-          <Form.Item name={['user', 'introduction']} label="Introduction">
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              ...layout.wrapperCol,
-              offset: 8,
-            }}
-          >
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form> */}
         <Form
-          name="basic"
+          name="cms"
           labelCol={{
             span: 8,
           }}
           wrapperCol={{
             span: 16,
           }}
-          initialValues={{
-            remember: true,
-          }}
           onFinish={onFinish}
           autoComplete="off"
         >
           <Form.Item
-            label="Room Number"
-            name="roomNumber"
+            label="Title"
+            name="title"
             rules={[
               {
                 required: true,
@@ -105,43 +87,56 @@ const AddRoom = ({ setisAddRoom }) => {
             <Input />
           </Form.Item>
           <Form.Item name="type" label="Type">
-            <Select
-              placeholder="Select option..."
-              // onChange={onGenderChange}
-              allowClear
-            >
-              <Option value="Standard">Standard</Option>
-              <Option value="Deluxe">Deluxe</Option>
-              <Option value="Suite">Suite</Option>
+            <Select placeholder="Select option..." allowClear>
+              <Option value="Header-Banner">Header-Banner</Option>
+              <Option value="Footer">Footer</Option>
+              <Option value="Contact-Us">Contact-Us</Option>
+              <Option value="About-Us">About-Us</Option>
             </Select>
-          </Form.Item>
-
-          <Form.Item label="Description" name="description">
-            <TextArea />
-          </Form.Item>
-
-          <Form.Item name="status" label="Status">
-            <Select
-              placeholder="Select option..."
-              // onChange={onGenderChange}
-              allowClear
-            >
-              <Option value="Active">Active</Option>
-              <Option value="InActive">InActive</Option>
-              <Option value="Booked">Booked</Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item label="Price" name="price">
-            <InputNumber className="w-full" />
           </Form.Item>
 
           <Form.Item label="Image" name="image">
-            <Upload>
+            <Upload onChange={handleChange} fileList={[]}>
               <Button className="flex items-center" icon={<UploadOutlined />}>
                 Click to Upload
               </Button>
             </Upload>
+            <div className="w-full" style={{ maxHeight: '230px', overflowY: 'auto' }}>
+              {filesData?.length > 0 &&
+                filesData?.map((val) => (
+                  <div key={val?.id} className="flex border rounded-md justify-between items-center p-1 px-3 my-1">
+                    <div className="flex">
+                      <span className="mr-2">
+                        <LinkOutlined />
+                      </span>
+                      {val?.file ? val?.file?.name : val?.name}
+                    </div>
+                    <div className="flex gap-3 text-base">
+                      <div className="cursor-pointer">
+                        <div
+                          onClick={() => {
+                            handlePreview(val);
+                          }}
+                        >
+                          <EyeOutlined />
+                        </div>
+                      </div>
+                      <div className="cursor-pointer">
+                        <div
+                          onClick={() => {
+                            const filteredRemovedFiles = filesData?.filter((elem) =>
+                              elem?.file ? elem?.file?.uid !== val?.id : elem?.id !== val?.id,
+                            );
+                            setFilesData(filteredRemovedFiles);
+                          }}
+                        >
+                          <DeleteOutlined style={{ color: 'red' }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
           </Form.Item>
 
           <div className="flex justify-end gap-2">

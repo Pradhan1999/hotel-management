@@ -434,6 +434,9 @@ hr{
   @apply dark:!border-white30;
 }
 /* Form Input */
+.ant-form-item{
+  @apply min-xxs:!mb-1 min-md:!mb-2;
+}
 .ant-form-item-label{
   @apply text-start !important;
 }

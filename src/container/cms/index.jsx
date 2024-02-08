@@ -9,15 +9,6 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { getAllCms } from '../../utility/services/cms';
 const { Search } = Input;
 
-const contentStyle = {
-  height: '120px',
-  color: '#fff',
-  lineHeight: '130px',
-  textAlign: 'center',
-  background: '#364d79',
-  borderRadius: '10px',
-};
-
 const columns = [
   {
     title: 'Type',
@@ -140,9 +131,10 @@ const Rooms = () => {
       </GlobalUtilityStyle>
 
       <Modal
-        title="Add Room"
+        title="Add"
         destroyOnClose
         open={isAddCms}
+        width={1024}
         // onOk={handleAddCmss}
         footer={false}
         onCancel={() => setisAddCms(false)}
