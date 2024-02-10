@@ -5,8 +5,10 @@ const addRooms = async ({ body }) => {
   return response;
 };
 
-const getAllRooms = async ({ start, limit, roomNumber }) => {
-  const response = await callApi.get(`/rooms?start=${start}&limit=${limit}&roomNumber=${roomNumber ? roomNumber : ''}`);
+const getAllRooms = async ({ start, limit, roomNumber, status }) => {
+  const response = await callApi.get(
+    `/rooms?start=${start}&limit=${limit}&roomNumber=${roomNumber ? roomNumber : ''}&status=${status ? status : ''}`,
+  );
   return response;
 };
 

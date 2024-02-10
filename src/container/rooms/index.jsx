@@ -14,6 +14,8 @@ const Rooms = () => {
   const [isAddRoom, setisAddRoom] = useState(false);
   const [isEditRoom, setIsEditRoom] = useState({ isOpen: false, roomId: '' });
   const [allRooms, setAllRooms] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [statusChange, setStatusChange] = useState('');
 
   const PageRoutes = [
     {
@@ -92,7 +94,7 @@ const Rooms = () => {
   ];
 
   const getAllRoomList = () => {
-    getAllRooms({})
+    getAllRooms({ roomNumber: searchValue, status: statusChange })
       .then((res) => {
         if (res) {
           setAllRooms(res?.data?.rooms);
@@ -103,9 +105,16 @@ const Rooms = () => {
 
   useEffect(() => {
     getAllRoomList();
-  }, []);
+  }, [searchValue, statusChange]);
 
-  const onSearch = (value) => console.log(value);
+  const onSearch = (value) => {
+    setSearchValue(value);
+  };
+
+  const handleStatusChange = (value) => {
+    console.log('===============', value);
+    setStatusChange(value);
+  };
 
   return (
     <>
@@ -120,31 +129,6 @@ const Rooms = () => {
             <Cards
               title={
                 <div className="flex items-center gap-4">
-                  <div className="font-normal">Sort By:</div>
-                  <div>
-                    <Select
-                      style={{
-                        width: 120,
-                      }}
-                      size="middle"
-                      placeholder="Type"
-                      // onChange={handleChange}
-                      options={[
-                        {
-                          value: 'Standard',
-                          label: 'Standard',
-                        },
-                        {
-                          value: 'Deluxe',
-                          label: 'Deluxe',
-                        },
-                        {
-                          value: 'Suite',
-                          label: 'Suite',
-                        },
-                      ]}
-                    />
-                  </div>
                   <div>
                     <Select
                       style={{
@@ -152,7 +136,12 @@ const Rooms = () => {
                       }}
                       size="middle"
                       placeholder="Status"
+                      onChange={handleStatusChange}
                       options={[
+                        {
+                          value: '',
+                          label: 'All',
+                        },
                         {
                           value: 'Active',
                           label: 'Active',
@@ -170,7 +159,7 @@ const Rooms = () => {
                   </div>
                   <div>
                     <Search
-                      placeholder="Search by room name"
+                      placeholder="Room Number"
                       allowClear
                       enterButton="Search"
                       size="middle"

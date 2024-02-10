@@ -5,8 +5,10 @@ const addOrder = async ({ body }) => {
   return response;
 };
 
-const getAllOrder = async ({ start, limit }) => {
-  const response = await callApi.get(`/orders?start=${start}&limit=${limit}`);
+const getAllOrder = async ({ start, limit, search, status }) => {
+  const response = await callApi.get(
+    `/orders?start=${start}&limit=${limit}&status=${status ? status : ''}&search=${search ? search : ''}`,
+  );
   return response;
 };
 
