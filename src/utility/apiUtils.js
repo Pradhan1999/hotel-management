@@ -6,7 +6,7 @@ const hostname = () => {
   let hostUrl = '';
   switch (window.location.hostname) {
     case 'localhost1': // dev
-      hostUrl = 'http://localhost:4000/api';
+      hostUrl = 'http://localhost:4001/api';
       break;
     default:
       hostUrl = 'https://hotel-backend-ahus.onrender.com/api';

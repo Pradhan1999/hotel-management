@@ -20,8 +20,8 @@ const updateOrder = async ({ id, body }) => {
   return response;
 };
 
-const deleteOrder = async (questionId) => {
-  const response = await callApi.delete(`/orders/${questionId}`);
+const deleteOrder = async ({ id }) => {
+  const response = await callApi.delete(`/orders/${id}`);
   return response;
 };
 

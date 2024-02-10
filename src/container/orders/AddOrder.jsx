@@ -1,40 +1,76 @@
-import { Button, Form, Input, Select, message, Row, Col, DatePicker } from 'antd';
-import React, { useState } from 'react';
-import { UploadOutlined, EyeOutlined, DeleteOutlined, LinkOutlined } from '@ant-design/icons';
-import { addOrder } from '../../utility/services/orders';
-import { uploadImage } from '../../utility/services/upload';
-
+import { Button, Form, Input, Select, message, Row, Col, DatePicker, Spin } from 'antd';
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
+import { addOrder, getSingleOrder, updateOrder } from '../../utility/services/orders';
 const { Option } = Select;
 
-const AddOrder = ({ setIsAddOrder, getAllOrder }) => {
+const AddOrder = ({ setIsAddOrder, isEditOrder, setIsEditOrder, getAllOrder }) => {
   const [loading, setLoading] = useState(false);
 
+  const [form] = Form.useForm();
+
   const onFinish = (values) => {
-    console.log(values);
+    // console.log(values);
 
     const body = values;
     setLoading(true);
-    addOrder({
-      body: body,
-    })
-      ?.then((res) => {
-        message.success('Order added successfully');
-        setIsAddOrder(false);
-        getAllOrder({ start: 0, limit: 10 });
-        setLoading(false);
-        console.log('res', res);
+    if (isEditOrder?.orderId) {
+      updateOrder({
+        id: isEditOrder?.orderId,
+        body: body,
       })
-      .catch((err) => {
-        message.error('Something went wrong');
-        console.log('err :>> ', err);
-        setLoading(false);
-      });
+        .then((res) => {
+          setIsEditOrder({ isOpen: false, orderId: '' });
+          getAllOrder();
+          message.success('Order updated successfully');
+        })
+        .catch((err) => console.log('err', err));
+    } else {
+      addOrder({
+        body: body,
+      })
+        ?.then((res) => {
+          message.success('Order added successfully');
+          setIsAddOrder(false);
+          getAllOrder({ start: 0, limit: 10 });
+          setLoading(false);
+          //   console.log('res', res);
+        })
+        .catch((err) => {
+          message.error('Something went wrong');
+          console.log('err :>> ', err);
+          setLoading(false);
+        });
+    }
   };
+
+  useEffect(() => {
+    // populate single room data
+    if (isEditOrder?.orderId) {
+      setLoading(true);
+      getSingleOrder({ id: isEditOrder?.orderId })
+        .then((res) => {
+          const data = res.data;
+          data.checkInDate = moment(data.checkInDate);
+          data.checkOutDate = moment(data.checkOutDate);
+          //   console.log('data', data);
+          form.setFieldsValue(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log('err', err);
+          setLoading(false);
+        });
+    }
+  }, [isEditOrder?.orderId]);
+
   return (
     <>
+      <Spin spinning={loading}></Spin>
       <div>
         <Form
-          name="cms"
+          form={form}
+          name="orders"
           labelCol={{
             span: 8,
           }}
@@ -124,16 +160,7 @@ const AddOrder = ({ setIsAddOrder, getAllOrder }) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                label="Room Number"
-                name="roomNumber"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Required! ',
-                  },
-                ]}
-              >
+              <Form.Item label="Room Number" name="roomNumber" rules={[{}]}>
                 <Input />
               </Form.Item>
             </Col>
@@ -167,7 +194,14 @@ const AddOrder = ({ setIsAddOrder, getAllOrder }) => {
             </Col>
           </Row>
           <div className="flex justify-end gap-2 mt-2">
-            <Button onClick={() => setIsAddOrder(false)}>Cancel</Button>
+            <Button
+              onClick={() => {
+                setIsAddOrder(false);
+                setIsEditOrder({ isOpen: false, orderId: '' });
+              }}
+            >
+              Cancel
+            </Button>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>

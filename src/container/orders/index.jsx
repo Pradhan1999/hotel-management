@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Table, Modal } from 'antd';
+import { Row, Col, Button, Table, Modal, Space, Popconfirm, message } from 'antd';
 import AddOrder from './AddOrder';
 import { GlobalUtilityStyle } from '../styled';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { getAllOrder } from '../../utility/services/orders';
+import { getAllOrder, deleteOrder } from '../../utility/services/orders';
 
 const Users = () => {
   const [allOrder, setAllOrder] = useState([]);
   const [isAddOrder, setIsAddOrder] = useState(false);
+  const [isEditOrder, setIsEditOrder] = useState({});
   const PageRoutes = [
     {
       path: '/',
@@ -64,6 +65,36 @@ const Users = () => {
       key: 'status',
       width: 150,
     },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <Button size="middle" onClick={() => setIsEditOrder({ isOpen: true, orderId: record?._id })}>
+            Edit
+          </Button>
+          <Popconfirm
+            title="Are you sure to delete this Order?"
+            onConfirm={() => {
+              deleteOrder({ id: record?._id })
+                .then((res) => {
+                  // console.log('res', res);
+                  message.success('Order Deleted Successfully');
+                  getAllOrders();
+                })
+                .catch((err) => console.log('err', err));
+            }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger size="middle">
+              Delete
+            </Button>
+          </Popconfirm>
+        </Space>
+      ),
+      width: 150,
+    },
   ];
 
   return (
@@ -92,15 +123,23 @@ const Users = () => {
         </Row>
       </GlobalUtilityStyle>
       <Modal
-        title="Add"
+        title={isAddOrder ? 'Add Order' : 'Edit Order'}
         destroyOnClose
-        open={isAddOrder}
+        open={isAddOrder || isEditOrder.isOpen}
         width={1024}
         // onOk={handleAddCmss}
         footer={false}
-        onCancel={() => setIsAddOrder(false)}
+        onCancel={() => {
+          setIsAddOrder(false);
+          setIsEditOrder({ isOpen: false, orderId: null });
+        }}
       >
-        <AddOrder setIsAddOrder={setIsAddOrder} getAllOrder={getAllOrders} />
+        <AddOrder
+          setIsAddOrder={setIsAddOrder}
+          getAllOrder={getAllOrders}
+          isEditOrder={isEditOrder}
+          setIsEditOrder={setIsEditOrder}
+        />
       </Modal>
     </>
   );
