@@ -67,6 +67,13 @@ const Users = () => {
       render: (checkoutDate) => moment(checkoutDate).format('YYYY-MM-DD'),
     },
     {
+      title: 'Room Number',
+      dataIndex: 'roomNumber',
+      key: 'roomNumber',
+      width: 150,
+      render: (roomNumber) => (roomNumber ? roomNumber : '-'),
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
