@@ -2,10 +2,13 @@ import { Button, Form, Input, Select, message, Row, Col, DatePicker, Spin } from
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { addOrder, getSingleOrder, updateOrder } from '../../utility/services/orders';
+import { getAllRooms } from '../../utility/services/rooms';
 const { Option } = Select;
 
 const AddOrder = ({ setIsAddOrder, isEditOrder, setIsEditOrder, getAllOrder }) => {
   const [loading, setLoading] = useState(false);
+  const [roomData, setRoomData] = useState([]);
+  const [roomIdData, setRoomIdData] = useState({});
 
   const [form] = Form.useForm();
 
@@ -24,7 +27,9 @@ const AddOrder = ({ setIsAddOrder, isEditOrder, setIsEditOrder, getAllOrder }) =
           getAllOrder();
           message.success('Order updated successfully');
         })
-        .catch((err) => console.log('err', err));
+        .catch((err) => {
+          message.error('Room Already Booked');
+        });
     } else {
       addOrder({
         body: body,
@@ -37,7 +42,7 @@ const AddOrder = ({ setIsAddOrder, isEditOrder, setIsEditOrder, getAllOrder }) =
           //   console.log('res', res);
         })
         .catch((err) => {
-          message.error('Something went wrong');
+          message.error('Room is already Booked');
           console.log('err :>> ', err);
           setLoading(false);
         });
@@ -54,6 +59,8 @@ const AddOrder = ({ setIsAddOrder, isEditOrder, setIsEditOrder, getAllOrder }) =
           data.checkInDate = moment(data.checkInDate);
           data.checkOutDate = moment(data.checkOutDate);
           //   console.log('data', data);
+          //   setRoomIdData({ option: data.roomNumber, value: data.roomId });
+          setRoomData([{ _id: data.roomId, roomNumber: data.roomNumber }]);
           form.setFieldsValue(data);
           setLoading(false);
         })
@@ -63,6 +70,21 @@ const AddOrder = ({ setIsAddOrder, isEditOrder, setIsEditOrder, getAllOrder }) =
         });
     }
   }, [isEditOrder?.orderId]);
+
+  const fetchRoomSuggestions = async (number) => {
+    setLoading(true);
+
+    getAllRooms({ roomNumber: number })
+      .then((res) => {
+        const data = res?.data?.rooms;
+        setRoomData(data); // Update room options state with fetched data
+        setLoading(false);
+      })
+      .catch((error) => {
+        message.error('Error fetching room suggestions');
+        setLoading(false);
+      });
+  };
 
   return (
     <>
@@ -160,8 +182,21 @@ const AddOrder = ({ setIsAddOrder, isEditOrder, setIsEditOrder, getAllOrder }) =
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="Room Number" name="roomNumber" rules={[{}]}>
-                <Input />
+              <Form.Item label="Room Number" name="roomId" rules={[{}]}>
+                <Select
+                  showSearch
+                  placeholder="Select room number"
+                  loading={loading}
+                  filterOption={false} // Disable client-side filtering
+                  onSearch={fetchRoomSuggestions}
+                  optionLabelProp="children"
+                >
+                  {roomData.map((room) => (
+                    <Option key={room._id} value={room._id}>
+                      {room.roomNumber}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
           </Row>
