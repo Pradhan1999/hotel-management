@@ -48,19 +48,20 @@ function SignIn() {
             <h2 className="mb-0 text-xl font-semibold text-dark dark:text-white87">Sign In </h2>
           </div>
           <div className="px-10 pt-8 pb-6">
-            <Form name="login" form={form} onFinish={handleSubmit} layout="vertical">
+            <Form name="login" form={form} onFinish={handleSubmit} layout="vertical" requiredMark={false}>
               <Form.Item
                 name="email"
-                rules={[{ message: 'Please input your username or Email!', required: true }]}
-                initialValue="admin@gmail.com"
-                label="Username or Email Address"
+                rules={[{ message: 'Please input your Email!', required: true }]}
+                // initialValue="admin@gmail.com"
+                label="Email Address"
                 className="[&>div>div>label]:text-sm [&>div>div>label]:text-dark dark:[&>div>div>label]:text-white60 [&>div>div>label]:font-medium"
               >
                 <Input placeholder="name@example.com" />
               </Form.Item>
               <Form.Item
                 name="password"
-                initialValue="123456"
+                rules={[{ required: true }]}
+                // initialValue="123456"
                 label="Password"
                 className="[&>div>div>label]:text-sm [&>div>div>label]:text-dark dark:[&>div>div>label]:text-white60 [&>div>div>label]:font-medium"
               >

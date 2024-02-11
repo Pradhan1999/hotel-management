@@ -1,8 +1,4 @@
-import {
-  UilCreateDashboard,
-  UilShieldCheck,
-  //   UilDollarAlt,
-} from '@iconscout/react-unicons';
+import { UilCreateDashboard, UilBedDouble, UilUser, UilFileEditAlt, UilBookOpen } from '@iconscout/react-unicons';
 import { Menu } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,10 +25,6 @@ function MenuItems({ toggleCollapsed }) {
       topMenu: state.ChangeLayoutMode.topMenu,
     };
   });
-
-  // const dispatch = useDispatch();
-
-  const path = '/';
 
   const pathName = window.location.pathname;
   const pathArray = pathName || [];
@@ -64,64 +56,29 @@ function MenuItems({ toggleCollapsed }) {
         {t('rooms')}
       </NavLink>,
       'rooms',
-      !topMenu && <UilShieldCheck />,
+      !topMenu && <UilBedDouble />,
     ),
     getItem(
       <NavLink onClick={toggleCollapsed} to={'/users'}>
         {t('users')}
       </NavLink>,
       'users',
-      !topMenu && <UilShieldCheck />,
+      !topMenu && <UilUser />,
     ),
     getItem(
       <NavLink onClick={toggleCollapsed} to={'/cms'}>
         {t('cms')}
       </NavLink>,
       'cms',
-      !topMenu && <UilShieldCheck />,
+      !topMenu && <UilFileEditAlt />,
     ),
     getItem(
       <NavLink onClick={toggleCollapsed} to={'/orders'}>
         {t('orders')}
       </NavLink>,
       'orders',
-      !topMenu && <UilShieldCheck />,
+      !topMenu && <UilBookOpen />,
     ),
-    // getItem(
-    //   <NavLink onClick={toggleCollapsed} to={`${path}testList`}>
-    //     {t('Test list')}
-    //   </NavLink>,
-    //   'testList',
-    //   !topMenu && <UilShieldCheck />,
-    // ),
-    // getItem(
-    //   <NavLink onClick={toggleCollapsed} to={`${path}question-bank`}>
-    //     {t('Question Bank')}
-    //   </NavLink>,
-    //   'questionBank',
-    //   !topMenu && <UilShieldCheck />,
-    // ),
-    // getItem(
-    //   <NavLink onClick={toggleCollapsed} to={`${path}contactUs`}>
-    //     {t('Enquiry Data')}
-    //   </NavLink>,
-    //   'contactUs',
-    //   !topMenu && <UilShieldCheck />,
-    // ),
-    // getItem(
-    //   <NavLink onClick={toggleCollapsed} to={`${path}customers`}>
-    //     {t('Customers')}
-    //   </NavLink>,
-    //   'customer',
-    //   !topMenu && <UilShieldCheck />,
-    // ),
-    // getItem(
-    //   <NavLink onClick={toggleCollapsed} to={`${path}questionpaper`}>
-    //     {t('Add Questions Paper')}
-    //   </NavLink>,
-    //   'questionPaper',
-    //   !topMenu && <UilShieldCheck />,
-    // ),
   ];
 
   return (

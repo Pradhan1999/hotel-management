@@ -19,18 +19,18 @@ const AuthLayout = (WraperContent) => {
             <div className="flex justify-center">
               <img
                 style={{
-                  maxWidth: '200px',
+                  maxWidth: '120px',
                 }}
                 className="dark:hidden"
-                src={require(`../../../static/logo/logo.png`)}
+                src={require(`../../../static/logo/logo2.jpeg`)}
                 alt=""
               />
               <img
                 style={{
-                  maxWidth: '200px',
+                  maxWidth: '120px',
                 }}
                 className="hidden dark:block"
-                src={require(`../../../static/logo/logo.png`)}
+                src={require(`../../../static/logo/logo2.jpeg`)}
                 alt=""
               />
             </div>

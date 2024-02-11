@@ -133,11 +133,11 @@ const ThemeLayout = (WrappedComponent) => {
                         style={{
                           maxWidth: '200px',
                         }}
-                        className="w-full max-w-[120px] xs:max-w-[100px]"
+                        className="w-full max-w-[70px] xs:max-w-[60px]"
                         src={
                           layoutMode === 'lightMode'
-                            ? require(`../static/logo/logo.png`)
-                            : require(`../static/logo/logo.png`)
+                            ? require(`../static/logo/logo2.jpeg`)
+                            : require(`../static/logo/logo2.jpeg`)
                         }
                         alt=""
                       />
