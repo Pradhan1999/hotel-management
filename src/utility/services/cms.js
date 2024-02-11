@@ -20,8 +20,8 @@ const updateCms = async ({ id, body }) => {
   return response;
 };
 
-const deleteCms = async (questionId) => {
-  const response = await callApi.delete(`/cms/${questionId}`);
+const deleteCms = async ({ id }) => {
+  const response = await callApi.delete(`/cms/${id}`);
   return response;
 };
 

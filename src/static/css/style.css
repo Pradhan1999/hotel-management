@@ -441,7 +441,7 @@ hr{
   @apply text-start !important;
 }
 .ant-input{
-  @apply dark:!bg-white10 dark:text-white60 dark:border-white10 !p-2;
+  @apply dark:!bg-white10 dark:text-white60 dark:border-white10 !p-[0.45rem];
 }
 
 .ant-input-number-handler-wrap{
